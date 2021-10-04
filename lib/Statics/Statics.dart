@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +25,15 @@ class Palette {
   static const Color backgroundColor = Color(0xFFECF3F9);
 }
 
-
+class LoadingAnimation extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SpinKitThreeBounce(
+      color: Theme.of(context).textSelectionColor,
+      size: 20.0,
+    );
+  }
+}
 
 //Original Theme
 ThemeData themeLightData(BuildContext context) {
@@ -34,8 +43,8 @@ ThemeData themeLightData(BuildContext context) {
     ),
     backgroundColor: Colors.white,
     textSelectionColor: Colors.black,
-    textSelectionHandleColor : Colors.grey,
-    shadowColor :Colors.grey[700],
+    textSelectionHandleColor: Colors.grey,
+    shadowColor: Colors.grey[700],
     primaryColor: Colors.pinkAccent,
     accentColor: Color(0xff679de5),
     primaryColorDark: Color(0xff679de5),
@@ -50,8 +59,8 @@ ThemeData themeDarkData(BuildContext context) {
     ),
     backgroundColor: Colors.black,
     textSelectionColor: Colors.white,
-    textSelectionHandleColor : Colors.grey,
-    shadowColor :Colors.grey[700],
+    textSelectionHandleColor: Colors.grey,
+    shadowColor: Colors.grey[700],
     primaryColor: Colors.pinkAccent,
     accentColor: Color(0xff679de5),
     primaryColorDark: Color(0xff679de5),

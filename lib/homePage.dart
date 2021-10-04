@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:music_player/Choices/Albums.dart';
 import 'package:music_player/Choices/Artist.dart';
 import 'package:music_player/Choices/Songs.dart';
 
@@ -159,25 +160,37 @@ class _HomePageState extends State<HomePage> {
         children: [
           _buildChoiceCard(
               text: "Playlists",
-              icon: Icons.playlist_play,
+              icon: CupertinoIcons.music_note_list,
               onPressed: () {
                 print("preesed");
               }),
           _buildChoiceCard(
               text: "Artistes",
-              icon: Icons.mic_external_on,
+              icon: CupertinoIcons.music_mic,
               onPressed: () {
                 print("preesed");
               }),
           _buildChoiceCard(
               text: "Albums",
-              icon: Icons.photo_album_outlined,
-              onPressed: () {
-                print("preesed");
+              icon: CupertinoIcons.music_albums,
+              onPressed: () async {
+                await Future.delayed(Duration(milliseconds: 100));
+
+                List<AlbumInfo> albums = await audioQuery.getAlbums();
+                albums = albums
+                    .where((album) =>
+                        (album.title != "Music" && album.numberOfSongs != "1"))
+                    .toList();
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => Albums(
+                              albums: albums,
+                            )));
               }),
           _buildChoiceCard(
               text: "Songs",
-              icon: Icons.music_note,
+              icon: CupertinoIcons.music_note,
               onPressed: () async {
                 await Future.delayed(Duration(milliseconds: 100));
 
