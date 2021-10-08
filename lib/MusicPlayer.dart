@@ -1,12 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class MusicDetailPage extends StatefulWidget {
   final Color color;
@@ -23,43 +19,25 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
   double _currentSliderValue = 0;
 
   // audio player here
-  final FlutterAudioQuery audioQuery = FlutterAudioQuery();
-  AudioPlayer audioPlayer;
   bool isPlaying = true;
 
   @override
   void initState() {
     super.initState();
-    initPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    stopSound();
   }
 
-  initPlayer() {
-    audioPlayer = new AudioPlayer();
-    audioPlayer.play(
-      widget.songInfo.filePath,
-      isLocal: true,
-    );
-  }
 
-  playSound() {
-    audioPlayer.resume();
-  }
 
-  stopSound() {
-    audioPlayer.pause();
-  }
 
-  seekSound() async {
-    /*File audioFile = await audioCache.load(widget.songInfo.filePath);
-    await advancedPlayer.setUrl(audioFile.path);
-    advancedPlayer.seek(Duration(milliseconds: 2000));*/
-  }
+
+
+
+  seekSound() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -184,6 +162,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                 setState(() {
                   _currentSliderValue = value;
                 });
+                seekSound();
               }),
           SizedBox(
             height: 20,
@@ -250,14 +229,12 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                         ),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (isPlaying) {
-                        stopSound();
                         setState(() {
                           isPlaying = false;
                         });
                       } else {
-                        playSound();
                         setState(() {
                           isPlaying = true;
                         });

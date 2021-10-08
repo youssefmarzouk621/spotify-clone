@@ -17,6 +17,7 @@ class Songs extends StatefulWidget {
 class _SongsState extends State<Songs> {
   final FlutterAudioQuery audioQuery = FlutterAudioQuery();
   List<SongInfo> _displayedSongs = [];
+
   @override
   void initState() {
     super.initState();
