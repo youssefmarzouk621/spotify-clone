@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/CustomWidgets/empty_screen.dart';
 import 'package:music_player/CustomWidgets/gradient_containers.dart';
 import 'package:music_player/Helpers/audio_query.dart';
+import 'package:music_player/MusicPlayer.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -298,7 +299,7 @@ class SongsTab extends StatelessWidget {
                   if (playIndex == -1) {
                     final singleSongMap = await OfflineAudioQuery()
                         .getArtwork([cachedSongs[index]]);
-                    /*Navigator.of(context).push(
+                    Navigator.of(context).push(
                       PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (_, __, ___) => PlayScreen(
@@ -310,9 +311,9 @@ class SongsTab extends StatelessWidget {
                           fromMiniplayer: false,
                         ),
                       ),
-                    );*/
+                    );
                   } else {
-                    /*Navigator.of(context).push(
+                    Navigator.of(context).push(
                       PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (_, __, ___) => PlayScreen(
@@ -324,7 +325,7 @@ class SongsTab extends StatelessWidget {
                           fromMiniplayer: false,
                         ),
                       ),
-                    );*/
+                    );
                   }
                 },
               );

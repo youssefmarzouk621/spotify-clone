@@ -30,16 +30,20 @@ dependencies:
   google_fonts: 
   sqflite: # local Storage
 
+  # Productivity
+  cached_network_image: ^3.1.0  
+
   # Audio related
   audiotagger: ^2.2.1
   audio_service: ^0.18.0
   just_audio: ^0.9.12
   on_audio_query: ^2.2.0
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # UI related
   cupertino_icons: ^1.0.2
-  
+  palette_generator: ^0.3.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

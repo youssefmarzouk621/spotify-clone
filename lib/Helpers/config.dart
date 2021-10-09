@@ -125,6 +125,10 @@ class MyTheme with ChangeNotifier {
     return backOpt[backGrad];
   }
 
+  Color getPlayGradient() {
+    return backOpt[backGrad].last;
+  }
+
   Color getColor(String color, int hue) {
     switch (color) {
       case 'Red':
