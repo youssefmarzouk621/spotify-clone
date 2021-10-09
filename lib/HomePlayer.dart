@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 double currentSlider = 0;
 
 class PlayerHome extends StatefulWidget {
-  final SongInfo song;
-  PlayerHome(this.song);
-
   @override
   _PlayerHomeState createState() => _PlayerHomeState();
 }
@@ -16,9 +12,6 @@ class _PlayerHomeState extends State<PlayerHome> {
   @override
   void initState() {
     super.initState();
-    if (widget.song != null) {
-      duration = Duration(milliseconds: int.parse(widget.song.duration));
-    }
   }
 
   @override
@@ -53,21 +46,7 @@ class _PlayerHomeState extends State<PlayerHome> {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        widget.song != null
-                            ? Text(widget.song.title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold))
-                            : Text(""),
-                        widget.song != null
-                            ? Text(widget.song.artist,
-                                style: TextStyle(
-                                  color: Colors.white54,
-                                ))
-                            : Text("")
-                      ],
+                      children: [Text("Love Again"), Text("Dua Lipa")],
                     ),
                   ],
                 ),
@@ -119,15 +98,7 @@ class _PlayerHomeState extends State<PlayerHome> {
                     ),
                   ),
                 ),
-                widget.song != null
-                    ? Text(
-                        Duration(milliseconds: int.parse(widget.song.duration))
-                            .toString()
-                            .split('.')[0]
-                            .substring(2),
-                        style: TextStyle(color: Colors.white),
-                      )
-                    : Text('')
+                Text('')
               ],
             )
           ],

@@ -1,4 +1,3 @@
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:music_player/Models/SongModel.dart';
 import 'package:music_player/Storage/DatabaseCreator.dart';
 
@@ -17,7 +16,7 @@ class UsersRepository {
     return songs;
   }
 
-  static Future<bool> shouldReload() async {
+  /*static Future<bool> shouldReload() async {
     final FlutterAudioQuery audioQuery = FlutterAudioQuery();
   
     List<SongModel> storedSongs = await getAllSongs();
@@ -28,7 +27,7 @@ class UsersRepository {
     } else {
       return true;
     }
-  }
+  }*/
 
   static Future<List<SongModel>> getSongsByArtist(int artistId) async {
     final sql =

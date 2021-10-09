@@ -1,5 +1,3 @@
-import 'package:flutter_audio_query/flutter_audio_query.dart';
-
 class SongModel {
   String albumId;
   String artistId;
@@ -21,29 +19,6 @@ class SongModel {
   bool isRingtone;
   bool isAlarm;
   bool isNotification;
-
-  SongModel.fromPub(SongInfo songInfo) {
-    this.albumId = songInfo.albumId;
-    this.artistId = songInfo.artistId;
-    this.artist = songInfo.artist;
-    this.album = songInfo.album;
-    this.title = songInfo.title;
-    this.displayName = songInfo.displayName;
-    this.composer = songInfo.composer;
-    this.year = songInfo.year;
-    this.track = songInfo.track;
-    this.duration = songInfo.duration;
-    this.bookmark = songInfo.bookmark;
-    this.filePath = songInfo.filePath;
-    this.uri = songInfo.uri;
-    this.fileSize = songInfo.fileSize;
-    this.albumArtwork = songInfo.albumArtwork;
-    this.isMusic = songInfo.isMusic;
-    this.isPodcast = songInfo.isPodcast;
-    this.isRingtone = songInfo.isRingtone;
-    this.isAlarm = songInfo.isAlarm;
-    this.isNotification = songInfo.isNotification;
-  }
 
   SongModel.fromJSON(Map<String, dynamic> json) {
     this.albumId = json['albumId'] as String;

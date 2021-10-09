@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:music_player/Choices/Albums.dart';
 import 'package:music_player/Choices/Artist.dart';
 import 'package:music_player/Choices/Songs.dart';
@@ -12,16 +11,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int index = 0;
-  final FlutterAudioQuery audioQuery = FlutterAudioQuery();
-  List<ArtistInfo> artists = [];
+
   @override
   void initState() {
     super.initState();
-    audioQuery.getArtists().then((list) {
-      setState(() {
-        artists = list;
-      });
-    });
   }
 
   @override
@@ -174,7 +167,7 @@ class _HomePageState extends State<HomePage> {
               text: "Albums",
               icon: CupertinoIcons.music_albums,
               onPressed: () async {
-                await Future.delayed(Duration(milliseconds: 100));
+                /*await Future.delayed(Duration(milliseconds: 100));
 
                 List<AlbumInfo> albums = await audioQuery.getAlbums();
                 albums = albums
@@ -186,17 +179,14 @@ class _HomePageState extends State<HomePage> {
                     CupertinoPageRoute(
                         builder: (context) => Albums(
                               albums: albums,
-                            )));
+                            )));*/
               }),
           _buildChoiceCard(
               text: "Songs",
               icon: CupertinoIcons.music_note,
               onPressed: () async {
-                await Future.delayed(Duration(milliseconds: 100));
-
-                List<SongInfo> list = await audioQuery.getSongs();
-                Navigator.push(context,
-                    CupertinoPageRoute(builder: (context) => Songs(list)));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Songs()));
               })
         ],
       ),

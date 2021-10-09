@@ -1,16 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class MusicDetailPage extends StatefulWidget {
   final Color color;
   final Uint8List imgBytes;
-  final SongInfo songInfo;
 
-  const MusicDetailPage({Key key, this.color, this.imgBytes, this.songInfo})
-      : super(key: key);
+  const MusicDetailPage({Key key, this.color, this.imgBytes}) : super(key: key);
   @override
   _MusicDetailPageState createState() => _MusicDetailPageState();
 }
@@ -30,12 +27,6 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
   void dispose() {
     super.dispose();
   }
-
-
-
-
-
-
 
   seekSound() async {}
 
@@ -90,7 +81,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                   width: size.width - 60,
                   height: size.width - 60,
                   child: Hero(
-                    tag: widget.songInfo.id,
+                    tag: "songId",
                     child: _buildImage(widget.imgBytes),
                   ),
                 ),
@@ -117,7 +108,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          widget.songInfo.title,
+                          "widget.songInfo.title",
                           maxLines: 1,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -129,7 +120,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                         Container(
                           width: 150,
                           child: Text(
-                            widget.songInfo.artist,
+                            "widget.songInfo.artist",
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(

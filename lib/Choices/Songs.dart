@@ -1,108 +1,128 @@
-import 'dart:typed_data';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
-import 'package:music_player/MusicPlayer.dart';
-import 'package:music_player/Statics/MusicAppBar.dart';
-import 'package:music_player/Statics/Statics.dart';
+import 'package:music_player/CustomWidgets/empty_screen.dart';
+import 'package:music_player/CustomWidgets/gradient_containers.dart';
+import 'package:music_player/Helpers/audio_query.dart';
+
+import 'package:on_audio_query/on_audio_query.dart';
 
 class Songs extends StatefulWidget {
-  final List<SongInfo> _songs;
-
-  Songs(this._songs);
   @override
   _SongsState createState() => _SongsState();
 }
 
-class _SongsState extends State<Songs> {
-  final FlutterAudioQuery audioQuery = FlutterAudioQuery();
-  List<SongInfo> _displayedSongs = [];
+class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
+  OfflineAudioQuery offlineAudioQuery = OfflineAudioQuery();
+  List<SongModel> _cachedSongs = [];
+  List<dynamic> _cachedSongsMap = [];
 
+  bool added = false;
   @override
   void initState() {
     super.initState();
-    setState(() => _displayedSongs = widget._songs);
+    getCached();
+  }
+
+  Future<void> getCached() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    await offlineAudioQuery.requestPermission();
+    final List<SongModel> temp = await offlineAudioQuery.getSongs();
+
+    _cachedSongs =
+        temp.where((i) => (i.duration ?? 60000) > 1000 * 10).toList();
+    added = true;
+    setState(() {});
+    _cachedSongsMap = await offlineAudioQuery.getArtwork(_cachedSongs);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: EdgeInsets.only(left: 10),
-      child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
-        MusicAppBar(title: "Songs"),
-        SliverAppBar(
-          pinned: true,
-          toolbarHeight: 60,
-          backgroundColor: Theme.of(context).backgroundColor,
-          automaticallyImplyLeading: false,
-          title: buildSearchField(Icons.search_rounded, "Search",
-              onChanged: (value) {
-            setState(() {
-              if (value.length != 0) {
-                _displayedSongs = widget._songs
-                    .where((song) =>
-                        song.title.toLowerCase().startsWith(value) ||
-                        song.artist.toLowerCase().startsWith(value))
-                    .toList();
-              } else {
-                _displayedSongs = widget._songs;
-              }
-            });
-          }),
-        ),
-        SliverList(
-          delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
-            if (_displayedSongs[index].isMusic) {
-              return _buildSongCard(
-                  leading: (_displayedSongs[index].albumArtwork == null)
-                      ? FutureBuilder<Uint8List>(
-                          future: audioQuery.getArtwork(
-                              type: ResourceType.SONG,
-                              id: _displayedSongs[index].id,
-                              size: Size(800, 800)),
-                          builder: (_, snapshot) {
-                            if (snapshot.data == null)
-                              return LoadingAnimation();
-                            if (snapshot.data.isEmpty)
-                              return CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/no_cover.png"),
-                              );
-
-                            return Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: MemoryImage(snapshot.data),
-                                    fit: BoxFit.cover,
-                                    alignment: AlignmentDirectional.center,
-                                  ),
-                                ));
-                          })
-                      : null,
-                  song: _displayedSongs[index],
-                  onPressed: () async {
-                    Uint8List imgBytes = await audioQuery.getArtwork(
-                        type: ResourceType.SONG,
-                        id: _displayedSongs[index].id,
-                        size: Size(800, 800));
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MusicDetailPage(
-                                  color: Theme.of(context).primaryColor,
-                                  songInfo: _displayedSongs[index],
-                                  imgBytes: imgBytes,
-                                )));
-                  });
-            } else {
-              return Container();
-            }
-          }, childCount: _displayedSongs.length),
-        )
-      ]),
+    super.build(context);
+    return GradientContainer(
+      child: Column(
+        children: [
+          Expanded(
+            // child: DefaultTabController(
+            // length: 4,
+            child: Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              appBar: AppBar(
+                title: const Text('Songs'),
+                // bottom: TabBar(
+                // controller: _tcontroller,
+                // tabs:
+                // widget.type == 'all'
+                // ?
+                //  [
+                //     const Tab(
+                //       text: 'Songs',
+                //     ),
+                //     const Tab(
+                //       text: 'Albums',
+                //     ),
+                //     const Tab(
+                //       text: 'Artists',
+                //     ),
+                //     const Tab(
+                //       text: 'Genres',
+                //     ),
+                //     const Tab(
+                //       text: 'Videos',
+                //     )
+                //   ]
+                // :
+                // const [
+                // Tab(
+                //   text: 'Songs',
+                // ),
+                // Tab(
+                //   text: 'Albums',
+                // ),
+                // Tab(
+                //   text: 'Artists',
+                // ),
+                // Tab(
+                //   text: 'Genres',
+                // ),
+                // ],
+                // ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(CupertinoIcons.search),
+                    tooltip: 'Search',
+                    onPressed: () {},
+                  ),
+                ],
+                centerTitle: true,
+                backgroundColor: Theme.of(context).backgroundColor,
+                elevation: 0,
+              ),
+              body: !added
+                  ? SizedBox(
+                      child: Center(
+                        child: SizedBox(
+                            height: MediaQuery.of(context).size.width / 7,
+                            width: MediaQuery.of(context).size.width / 7,
+                            child: const CircularProgressIndicator()),
+                      ),
+                    )
+                  :
+                  // TabBarView(
+                  //     physics: const CustomPhysics(),
+                  //     controller: _tcontroller,
+                  //     children:
+                  //         //  widget.type == 'all'
+                  //         //     ?
+                  //         [
+                  SongsTab(
+                      cachedSongs: _cachedSongs,
+                      cachedSongsMap: _cachedSongsMap,
+                    ),
+            ),
+          ),
+          //MiniPlayer(),
+        ],
+      ),
     );
   }
 
@@ -138,7 +158,7 @@ class _SongsState extends State<Songs> {
     );
   }
 
-  Widget _buildImage(SongInfo songInfo) {
+/*  Widget _buildImage(SongInfo songInfo) {
     if (songInfo.albumArtwork == null) {
       return FutureBuilder<Uint8List>(
           future: audioQuery.getArtwork(
@@ -219,5 +239,95 @@ class _SongsState extends State<Songs> {
         ),
       ),
     );
+  }
+*/
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class SongsTab extends StatelessWidget {
+  final List<SongModel> cachedSongs;
+  final List cachedSongsMap;
+  const SongsTab({@required this.cachedSongs, @required this.cachedSongsMap});
+
+  @override
+  Widget build(BuildContext context) {
+    return cachedSongs.isEmpty
+        ? EmptyScreen().emptyScreen(context, 3, 'Nothing to ', 15.0,
+            'Show Here', 45, 'Download Something', 23.0)
+        : ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
+            shrinkWrap: true,
+            itemExtent: 70.0,
+            itemCount: cachedSongs.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: QueryArtworkWidget(
+                  id: cachedSongs[index].id,
+                  type: ArtworkType.AUDIO,
+                  artworkBorder: BorderRadius.circular(7.0),
+                  nullArtworkWidget: ClipRRect(
+                    borderRadius: BorderRadius.circular(7.0),
+                    child: const Image(
+                      fit: BoxFit.cover,
+                      height: 50.0,
+                      width: 50.0,
+                      image: AssetImage('assets/cover.jpg'),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  cachedSongs[index].title.trim() != ''
+                      ? cachedSongs[index].title
+                      : cachedSongs[index].displayNameWOExt,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Theme.of(context).textSelectionColor),
+                ),
+                subtitle: Text(
+                  cachedSongs[index]
+                          .artist
+                          ?.replaceAll('<unknown>', 'Unknown') ??
+                      'Unknown',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Theme.of(context).textSelectionColor),
+                ),
+                onTap: () async {
+                  final int playIndex = cachedSongsMap.indexWhere(
+                      (element) => element['_id'] == cachedSongs[index].id);
+                  if (playIndex == -1) {
+                    final singleSongMap = await OfflineAudioQuery()
+                        .getArtwork([cachedSongs[index]]);
+                    /*Navigator.of(context).push(
+                      PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (_, __, ___) => PlayScreen(
+                          data: {
+                            'response': singleSongMap,
+                            'index': 0,
+                            'offline': true
+                          },
+                          fromMiniplayer: false,
+                        ),
+                      ),
+                    );*/
+                  } else {
+                    /*Navigator.of(context).push(
+                      PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (_, __, ___) => PlayScreen(
+                          data: {
+                            'response': cachedSongsMap,
+                            'index': playIndex,
+                            'offline': true
+                          },
+                          fromMiniplayer: false,
+                        ),
+                      ),
+                    );*/
+                  }
+                },
+              );
+            });
   }
 }

@@ -27,9 +27,15 @@ dependencies:
   flutter_icons: ^1.1.0
   intl: # dateTime
   flutter_spinkit: # spin loading
-  google_fonts: ^0.3.5
-  flutter_audio_query: "^0.3.5+6"
+  google_fonts: 
   sqflite: # local Storage
+
+  # Audio related
+  audiotagger: ^2.2.1
+  audio_service: ^0.18.0
+  just_audio: ^0.9.12
+  on_audio_query: ^2.2.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
