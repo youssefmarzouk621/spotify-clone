@@ -228,7 +228,7 @@ class _PlayScreenState extends State<PlayScreen> {
       final PaletteGenerator paletteGenerator =
           await PaletteGenerator.fromImageProvider(imageProvider);
       gradientColor.value = paletteGenerator.dominantColor.color;
-      //currentTheme.setLastPlayGradient(gradientColor.value);
+      currentTheme.setLastPlayGradient(gradientColor.value);
     }
 
     return Dismissible(
@@ -260,22 +260,10 @@ class _PlayScreenState extends State<PlayScreen> {
                         end: !useImageColor
                             ? Alignment.bottomRight
                             : Alignment.center,
-                        colors: !useImageColor
-                            ? Theme.of(context).brightness == Brightness.dark
-                                ? currentTheme.getBackGradient()
-                                : [
-                                    const Color(0xfff5f9ff),
-                                    Colors.white,
-                                  ]
-                            : Theme.of(context).brightness == Brightness.dark
-                                ? [
-                                    value ?? Colors.grey[900],
-                                    currentTheme.getPlayGradient(),
-                                  ]
-                                : [
-                                    value ?? const Color(0xfff5f9ff),
-                                    Colors.white,
-                                  ],
+                        colors: [
+                          value ?? const Color(0xfff5f9ff),
+                          Colors.black,
+                        ],
                       ),
                     ),
                     child: SafeArea(
@@ -291,19 +279,7 @@ class _PlayScreenState extends State<PlayScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               }),
-                          actions: [
-                            IconButton(
-                                icon: Image.asset(
-                                  'assets/lyrics.png',
-                                ),
-                                tooltip: 'Lyrics',
-                                onPressed: () => print("flip")),
-                            if (!offline)
-                              IconButton(
-                                  icon: const Icon(Icons.share_rounded),
-                                  tooltip: 'Share',
-                                  onPressed: () {}),
-                          ],
+                          actions: [],
                         ),
                         body: Builder(builder: (BuildContext context) {
                           scaffoldContext = context;
@@ -424,7 +400,7 @@ class ControlButtons extends StatelessWidget {
                 icon: const Icon(Icons.skip_previous_rounded),
                 iconSize: miniplayer ? 24.0 : 45.0,
                 tooltip: 'Skip Previous',
-                color: Theme.of(context).iconTheme.color,
+                color: Colors.white,
                 onPressed:
                     queueState.hasPrevious ? audioHandler.skipToPrevious : null,
               );
@@ -516,7 +492,7 @@ class ControlButtons extends StatelessWidget {
                 icon: const Icon(Icons.skip_next_rounded),
                 iconSize: miniplayer ? 24.0 : 45.0,
                 tooltip: 'Skip Next',
-                color: Theme.of(context).iconTheme.color,
+                color: Colors.white,
                 onPressed: queueState.hasNext ? audioHandler.skipToNext : null,
               );
             },
@@ -578,7 +554,7 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
                         }
                       },
                       onLongPress: () {
-                        if (!widget.offline) {
+                        if (widget.offline) {
                           print("add to playlist");
                         }
                       },
@@ -603,11 +579,11 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
                       },
                       child: Stack(
                         children: [
-                          Card(
-                            elevation: 10.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
-                            clipBehavior: Clip.antiAlias,
+                          Container(
+                            //elevation: 10.0,
+                            /*shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),*/
+                            //clipBehavior: Clip.hardEdge,
                             child: widget.mediaItem.artUri
                                     .toString()
                                     .startsWith('file')
@@ -775,6 +751,7 @@ class NameNControls extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       // color: Theme.of(context).accentColor,
@@ -788,7 +765,9 @@ class NameNControls extends StatelessWidget {
                     mediaItem.artist ?? 'Unknown',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w400),
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -837,9 +816,10 @@ class NameNControls extends StatelessWidget {
                         icon: shuffleModeEnabled
                             ? const Icon(
                                 Icons.shuffle_rounded,
+                                color: Colors.white,
                               )
                             : Icon(Icons.shuffle_rounded,
-                                color: Theme.of(context).disabledColor),
+                                color: Colors.white.withOpacity(0.5)),
                         tooltip: 'Shuffle',
                         onPressed: () async {
                           final enable = !shuffleModeEnabled;
@@ -866,13 +846,13 @@ class NameNControls extends StatelessWidget {
                       const texts = ['None', 'All', 'One'];
                       final icons = [
                         Icon(Icons.repeat_rounded,
-                            color: Theme.of(context).disabledColor),
+                            color: Colors.white.withOpacity(0.5)),
                         const Icon(
                           Icons.repeat_rounded,
+                          color: Colors.white,
                         ),
-                        const Icon(
-                          Icons.repeat_one_rounded,
-                        ),
+                        const Icon(Icons.repeat_one_rounded,
+                            color: Colors.white),
                       ];
                       const cycleModes = [
                         AudioServiceRepeatMode.none,
@@ -911,14 +891,15 @@ class NameNControls extends StatelessWidget {
               SizedBox(height: 5.0),
               Icon(
                 Icons.expand_less_rounded,
+                color: Colors.white,
               ),
               Text(
                 'Now Playing',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Colors.white),
               ),
               SizedBox(height: 5.0),
             ],

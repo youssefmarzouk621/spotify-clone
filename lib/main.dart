@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: themeLightData(context),
+      theme: themeDarkData(context),
       darkTheme: themeDarkData(context),
       title: 'Music Player',
       debugShowCheckedModeBanner: false,

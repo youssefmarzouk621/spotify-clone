@@ -54,10 +54,8 @@ class _SeekBarState extends State<SeekBar> {
           SliderTheme(
             data: _sliderThemeData.copyWith(
               thumbShape: HiddenThumbComponentShape(),
-              activeTrackColor:
-                  Theme.of(context).iconTheme.color.withOpacity(0.5),
-              inactiveTrackColor:
-                  Theme.of(context).iconTheme.color.withOpacity(0.3),
+              activeTrackColor: Colors.white.withOpacity(0.5),
+              inactiveTrackColor: Colors.white.withOpacity(0.3),
               trackHeight: 4.0,
               // trackShape: RoundedRectSliderTrackShape(),
               trackShape: const RectangularSliderTrackShape(),
@@ -74,8 +72,8 @@ class _SeekBarState extends State<SeekBar> {
           SliderTheme(
             data: _sliderThemeData.copyWith(
               inactiveTrackColor: Colors.transparent,
-              activeTrackColor: Theme.of(context).iconTheme.color,
-              thumbColor: Theme.of(context).iconTheme.color,
+              activeTrackColor: Colors.white,
+              thumbColor: Colors.white,
               trackHeight: 4.0,
             ),
             child: Slider(
@@ -114,7 +112,7 @@ class _SeekBarState extends State<SeekBar> {
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: speedValue == '1.0x'
-                            ? Theme.of(context).disabledColor
+                            ? Colors.white.withOpacity(0.5)
                             : null,
                       ),
                     ),
@@ -138,7 +136,7 @@ class _SeekBarState extends State<SeekBar> {
                       .firstMatch('$_position')
                       ?.group(1) ??
                   '$_position',
-              // style: Theme.of(context).textTheme.caption,
+              style: TextStyle(color: Colors.white.withOpacity(0.8)),
             ),
           ),
           Positioned(
@@ -149,7 +147,7 @@ class _SeekBarState extends State<SeekBar> {
                       .firstMatch('$_duration')
                       ?.group(1) ??
                   '$_duration',
-              // style: Theme.of(context).textTheme.caption,
+              style: TextStyle(color: Colors.white.withOpacity(0.8)),
             ),
           ),
         ],
