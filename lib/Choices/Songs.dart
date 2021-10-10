@@ -41,91 +41,89 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return GradientContainer(
-      child: Column(
-        children: [
-          Expanded(
-            // child: DefaultTabController(
-            // length: 4,
-            child: Scaffold(
+    return Column(
+      children: [
+        Expanded(
+          // child: DefaultTabController(
+          // length: 4,
+          child: Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            appBar: AppBar(
+              title: const Text('Songs'),
+              // bottom: TabBar(
+              // controller: _tcontroller,
+              // tabs:
+              // widget.type == 'all'
+              // ?
+              //  [
+              //     const Tab(
+              //       text: 'Songs',
+              //     ),
+              //     const Tab(
+              //       text: 'Albums',
+              //     ),
+              //     const Tab(
+              //       text: 'Artists',
+              //     ),
+              //     const Tab(
+              //       text: 'Genres',
+              //     ),
+              //     const Tab(
+              //       text: 'Videos',
+              //     )
+              //   ]
+              // :
+              // const [
+              // Tab(
+              //   text: 'Songs',
+              // ),
+              // Tab(
+              //   text: 'Albums',
+              // ),
+              // Tab(
+              //   text: 'Artists',
+              // ),
+              // Tab(
+              //   text: 'Genres',
+              // ),
+              // ],
+              // ),
+              actions: [
+                IconButton(
+                  icon: const Icon(CupertinoIcons.search),
+                  tooltip: 'Search',
+                  onPressed: () {},
+                ),
+              ],
+              centerTitle: false,
               backgroundColor: Theme.of(context).backgroundColor,
-              appBar: AppBar(
-                title: const Text('Songs'),
-                // bottom: TabBar(
-                // controller: _tcontroller,
-                // tabs:
-                // widget.type == 'all'
-                // ?
-                //  [
-                //     const Tab(
-                //       text: 'Songs',
-                //     ),
-                //     const Tab(
-                //       text: 'Albums',
-                //     ),
-                //     const Tab(
-                //       text: 'Artists',
-                //     ),
-                //     const Tab(
-                //       text: 'Genres',
-                //     ),
-                //     const Tab(
-                //       text: 'Videos',
-                //     )
-                //   ]
-                // :
-                // const [
-                // Tab(
-                //   text: 'Songs',
-                // ),
-                // Tab(
-                //   text: 'Albums',
-                // ),
-                // Tab(
-                //   text: 'Artists',
-                // ),
-                // Tab(
-                //   text: 'Genres',
-                // ),
-                // ],
-                // ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(CupertinoIcons.search),
-                    tooltip: 'Search',
-                    onPressed: () {},
-                  ),
-                ],
-                centerTitle: false,
-                backgroundColor: Theme.of(context).backgroundColor,
-                elevation: 0,
-              ),
-              body: !added
-                  ? SizedBox(
-                      child: Center(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.width / 7,
-                            width: MediaQuery.of(context).size.width / 7,
-                            child: LoadingAnimation()),
-                      ),
-                    )
-                  :
-                  // TabBarView(
-                  //     physics: const CustomPhysics(),
-                  //     controller: _tcontroller,
-                  //     children:
-                  //         //  widget.type == 'all'
-                  //         //     ?
-                  //         [
-                  SongsTab(
-                      cachedSongs: _cachedSongs,
-                      cachedSongsMap: _cachedSongsMap,
-                    ),
+              elevation: 0,
             ),
+            body: !added
+                ? SizedBox(
+                    child: Center(
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 7,
+                          width: MediaQuery.of(context).size.width / 7,
+                          child: LoadingAnimation()),
+                    ),
+                  )
+                :
+                // TabBarView(
+                //     physics: const CustomPhysics(),
+                //     controller: _tcontroller,
+                //     children:
+                //         //  widget.type == 'all'
+                //         //     ?
+                //         [
+                SongsTab(
+                    cachedSongs: _cachedSongs,
+                    cachedSongsMap: _cachedSongsMap,
+                  ),
           ),
-          MiniPlayer(),
-        ],
-      ),
+        ),
+        MiniPlayer(),
+      ],
     );
   }
 

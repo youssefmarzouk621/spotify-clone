@@ -4,11 +4,32 @@ import 'package:music_player/Services/audio_service.dart';
 import 'package:music_player/Statics/Statics.dart';
 import 'package:music_player/homePage.dart';
 import 'package:music_player/MusicPlayer.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 AudioPlayerHandler audioHandler;
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Paint.enableDithering = true;
+  setOptimalDisplayMode();
   await startService();
   runApp(MyApp());
+}
+
+Future<void> setOptimalDisplayMode() async {
+  final List<DisplayMode> supported = await FlutterDisplayMode.supported;
+  final DisplayMode active = await FlutterDisplayMode.active;
+
+  final List<DisplayMode> sameResolution = supported
+      .where((DisplayMode m) =>
+          m.width == active.width && m.height == active.height)
+      .toList()
+        ..sort((DisplayMode a, DisplayMode b) =>
+            b.refreshRate.compareTo(a.refreshRate));
+
+  final DisplayMode mostOptimalMode =
+      sameResolution.isNotEmpty ? sameResolution.first : active;
+
+  await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
 }
 
 Future<void> startService() async {
@@ -33,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: themeDarkData(context),
       darkTheme: themeDarkData(context),
-      title: 'Music Player',
+      title: 'HighNote',
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );

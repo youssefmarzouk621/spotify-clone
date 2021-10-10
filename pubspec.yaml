@@ -32,6 +32,7 @@ dependencies:
 
   # Productivity
   cached_network_image: ^3.1.0  
+  flutter_displaymode: ^0.3.2
 
   # Audio related
   audiotagger: ^2.2.1
