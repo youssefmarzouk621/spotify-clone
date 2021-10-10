@@ -19,10 +19,12 @@ import 'Helpers/config.dart';
 class PlayScreen extends StatefulWidget {
   final Map data;
   final bool fromMiniplayer;
+  final bool displayNowPlaying;
   final bool recommend;
   const PlayScreen({
     @required this.data,
     @required this.fromMiniplayer,
+    @required this.displayNowPlaying,
     this.recommend = true,
   });
 
@@ -47,8 +49,7 @@ class _PlayScreenState extends State<PlayScreen> {
   bool downloaded = false;
   bool fromYT = false;
   String defaultCover = '';
-  final ValueNotifier<Color> gradientColor =
-      ValueNotifier<Color>(Palette.primaryColor);
+  final ValueNotifier<Color> gradientColor = ValueNotifier<Color>(Colors.black);
 
   void sleepTimer(int time) {
     audioHandler.customAction('sleepTimer', {'time': time});
@@ -303,6 +304,8 @@ class _PlayScreenState extends State<PlayScreen> {
                                     child: NameNControls(
                                       mediaItem,
                                       offline: offline,
+                                      displayNowPlaying:
+                                          widget.displayNowPlaying,
                                     ),
                                   ),
                                 ],
@@ -322,6 +325,7 @@ class _PlayScreenState extends State<PlayScreen> {
                                   child: NameNControls(
                                     mediaItem,
                                     offline: offline,
+                                    displayNowPlaying: widget.displayNowPlaying,
                                   ),
                                 ),
                               ],
@@ -400,9 +404,10 @@ class ControlButtons extends StatelessWidget {
                 icon: const Icon(Icons.skip_previous_rounded),
                 iconSize: miniplayer ? 24.0 : 45.0,
                 tooltip: 'Skip Previous',
-                color: Colors.white,
-                onPressed:
-                    queueState.hasPrevious ? audioHandler.skipToPrevious : null,
+                color: queueState.hasPrevious ? Colors.white : Colors.white38,
+                onPressed: queueState.hasPrevious
+                    ? audioHandler.skipToPrevious
+                    : () => print("no previous"),
               );
             },
           ),
@@ -439,7 +444,7 @@ class ControlButtons extends StatelessWidget {
                                     icon: const Icon(
                                       Icons.pause_rounded,
                                     ),
-                                    color: Theme.of(context).iconTheme.color,
+                                    color: Colors.white,
                                   )
                                 : IconButton(
                                     tooltip: 'Play',
@@ -447,7 +452,7 @@ class ControlButtons extends StatelessWidget {
                                     icon: const Icon(
                                       Icons.play_arrow_rounded,
                                     ),
-                                    color: Theme.of(context).iconTheme.color,
+                                    color: Colors.white,
                                   ))
                       else
                         Center(
@@ -492,8 +497,10 @@ class ControlButtons extends StatelessWidget {
                 icon: const Icon(Icons.skip_next_rounded),
                 iconSize: miniplayer ? 24.0 : 45.0,
                 tooltip: 'Skip Next',
-                color: Colors.white,
-                onPressed: queueState.hasNext ? audioHandler.skipToNext : null,
+                color: queueState.hasNext ? Colors.white : Colors.white38,
+                onPressed: queueState.hasNext
+                    ? audioHandler.skipToNext
+                    : () => print("no next"),
               );
             },
           ),
@@ -715,8 +722,10 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
 class NameNControls extends StatelessWidget {
   final MediaItem mediaItem;
   final bool offline;
+  final bool displayNowPlaying;
 
-  const NameNControls(this.mediaItem, {this.offline = false});
+  const NameNControls(this.mediaItem,
+      {this.offline = false, @required this.displayNowPlaying});
 
   Stream<Duration> get _bufferedPositionStream => audioHandler.playbackState
       .map((state) => state.bufferedPosition)
@@ -878,33 +887,35 @@ class NameNControls extends StatelessWidget {
         ),
 
         // Now playing
-        GestureDetector(
-          onVerticalDragEnd: (_) {
-            print("show modal bottom sheet");
-          },
-          onTap: () {
-            print("show modal bottom sheet");
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              SizedBox(height: 5.0),
-              Icon(
-                Icons.expand_less_rounded,
-                color: Colors.white,
-              ),
-              Text(
-                'Now Playing',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: Colors.white),
-              ),
-              SizedBox(height: 5.0),
-            ],
-          ),
-        ),
+        displayNowPlaying
+            ? GestureDetector(
+                onVerticalDragEnd: (_) {
+                  print("show modal bottom sheet");
+                },
+                onTap: () {
+                  print("show modal bottom sheet");
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(height: 5.0),
+                    Icon(
+                      Icons.expand_less_rounded,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Now Playing',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white),
+                    ),
+                    SizedBox(height: 5.0),
+                  ],
+                ),
+              )
+            : Container(),
       ],
     );
   }

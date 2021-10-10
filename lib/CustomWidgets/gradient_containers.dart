@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/Helpers/config.dart';
+import 'package:music_player/Statics/Statics.dart';
 
 class GradientContainer extends StatefulWidget {
   final Widget child;
@@ -84,7 +85,8 @@ class _GradientCardState extends State<GradientCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: widget.elevation ?? 3,
+      elevation: 10,
+      shadowColor: Palette.primaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(widget.radius ?? 10.0),
       ),
@@ -95,13 +97,8 @@ class _GradientCardState extends State<GradientCard> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: Theme.of(context).brightness == Brightness.dark
-                ? currentTheme.getCardGradient(
-                    miniplayer: widget.miniplayer ?? false)
-                : [
-                    Colors.white,
-                    Theme.of(context).canvasColor,
-                  ],
+            colors: currentTheme.getCardGradient(
+                miniplayer: widget.miniplayer ?? false),
           ),
         ),
         child: widget.child,

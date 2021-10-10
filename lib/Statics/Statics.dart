@@ -13,7 +13,7 @@ DateFormat dateFormat = DateFormat("dd/MM/yyyy");
 
 class Palette {
   static const Color iconColor = Color(0xffaabbcc);
-  static const Color primaryColor = Color(0xff0678ea);
+  static const Color primaryColor = Colors.pinkAccent;
   static const Color secondaryColor = Color(0xff679de5);
   static const Color thirdColor = Color(0xff679de5);
   static const Color fourthColor = Color(0xff8fb9f1);
@@ -29,9 +29,10 @@ class Palette {
 class LoadingAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SpinKitThreeBounce(
-      color: Theme.of(context).textSelectionColor,
-      size: 20.0,
+    return SpinKitRing(
+      color: Theme.of(context).primaryColor,
+      size: 50.0,
+      lineWidth: 2.5,
     );
   }
 }

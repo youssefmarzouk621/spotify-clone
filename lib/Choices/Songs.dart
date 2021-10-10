@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:music_player/CustomWidgets/empty_screen.dart';
 import 'package:music_player/CustomWidgets/gradient_containers.dart';
 import 'package:music_player/Helpers/audio_query.dart';
+import 'package:music_player/MiniPlayer.dart';
 import 'package:music_player/MusicPlayer.dart';
+import 'package:music_player/Statics/Statics.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -94,7 +96,7 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
                     onPressed: () {},
                   ),
                 ],
-                centerTitle: true,
+                centerTitle: false,
                 backgroundColor: Theme.of(context).backgroundColor,
                 elevation: 0,
               ),
@@ -104,7 +106,7 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
                         child: SizedBox(
                             height: MediaQuery.of(context).size.width / 7,
                             width: MediaQuery.of(context).size.width / 7,
-                            child: const CircularProgressIndicator()),
+                            child: LoadingAnimation()),
                       ),
                     )
                   :
@@ -121,7 +123,7 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
                     ),
             ),
           ),
-          //MiniPlayer(),
+          MiniPlayer(),
         ],
       ),
     );
@@ -309,6 +311,7 @@ class SongsTab extends StatelessWidget {
                             'offline': true
                           },
                           fromMiniplayer: false,
+                          displayNowPlaying: false,
                         ),
                       ),
                     );
@@ -323,6 +326,7 @@ class SongsTab extends StatelessWidget {
                             'offline': true
                           },
                           fromMiniplayer: false,
+                          displayNowPlaying: false,
                         ),
                       ),
                     );
