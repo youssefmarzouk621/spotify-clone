@@ -12,7 +12,7 @@ Superbe Lecteur de Musique fait avec Flutter !
 2. Récupérez le code source de la branche master.
 
 ```
-git clone https://github.com/Sangwan5688/BlackHole.git
+git clone https://github.com/youssefmarzouk621/HighNote.git
 ```
 
 3. Lancez l'application avec Android Studio ou VS Code. Ou dans la ligne de commandes:
