@@ -1,4 +1,4 @@
-# HignNote
+# HighNote
 
 Superbe Lecteur de Musique fait avec Flutter !
 
