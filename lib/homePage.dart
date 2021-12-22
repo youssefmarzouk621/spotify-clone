@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/Choices/Albums.dart';
-import 'package:music_player/Choices/Artist.dart';
-import 'package:music_player/Choices/Songs.dart';
+import 'package:music_player/Pages/Artist.dart';
+import 'package:music_player/Pages/PlaylistScreen.dart';
+import 'package:music_player/Pages/Songs.dart';
+import 'package:music_player/MiniPlayer.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,40 +20,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: SafeArea(
-        minimum: EdgeInsets.only(left: 10),
-        child: CustomScrollView(
-          scrollDirection: Axis.vertical,
-          slivers: [
-            SliverAppBar(
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text("Library",
-                    style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold)),
-                titlePadding: EdgeInsets.only(left: 15),
+    return Column(children: [
+      Expanded(
+          // child: DefaultTabController(
+          // length: 4,
+          child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: SafeArea(
+          minimum: EdgeInsets.only(left: 10),
+          child: CustomScrollView(
+            scrollDirection: Axis.vertical,
+            slivers: [
+              SliverAppBar(
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text("Library",
+                      style: TextStyle(
+                          color: Theme.of(context).textSelectionColor,
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold)),
+                  titlePadding: EdgeInsets.only(left: 15, bottom: 10),
+                ),
+                brightness: Brightness.dark,
+                backgroundColor: Theme.of(context).backgroundColor,
+                toolbarHeight: 60,
+                pinned: true,
               ),
-              brightness: Brightness.dark,
-              backgroundColor: Theme.of(context).backgroundColor,
-              toolbarHeight: 95,
-              pinned: true,
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              _buildChoices(),
-              Container(
-                  padding: EdgeInsets.only(top: 15),
-                  child: _buildFavotitesArtists()),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                _buildPages(),
+                Container(
+                    padding: EdgeInsets.only(top: 15),
+                    child: _buildFavotitesArtists()),
 
-              //_buildRecentlyAdded(),
-            ]))
-          ],
+                //_buildRecentlyAdded(),
+              ]))
+            ],
+          ),
         ),
-      ),
-    );
+      )),
+      MiniPlayer()
+    ]);
   }
 
   Widget _buildRecentlyAdded() {
@@ -144,7 +151,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildChoices() {
+  Widget _buildPages() {
     return Container(
       padding: EdgeInsets.only(top: 15),
       child: Column(
@@ -155,7 +162,8 @@ class _HomePageState extends State<HomePage> {
               text: "Playlists",
               icon: CupertinoIcons.music_note_list,
               onPressed: () {
-                print("preesed");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PlaylistScreen()));
               }),
           _buildChoiceCard(
               text: "Artistes",

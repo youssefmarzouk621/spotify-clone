@@ -8,7 +8,8 @@ import 'package:music_player/Statics/Statics.dart';
 
 import 'CustomWidgets/gradient_containers.dart';
 import 'MusicPlayer.dart';
-import 'main.dart';
+
+import 'package:music_player/main.dart';
 
 class MiniPlayer extends StatefulWidget {
   @override
