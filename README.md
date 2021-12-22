@@ -4,10 +4,7 @@ Superbe Lecteur de Musique fait avec Flutter !
 
 ## Captures d'Écran
 
-<img src="./screenshots/1.jpg" width="25%"> 
-<img src="./screenshots/2.jpg" width="25%"> 
-<img src="./screenshots/3.jpg" width="25%"> 
-<img src="./screenshots/4.jpg" width="25%"> 
+<img src="./screenshots/1.jpg" width="24%"> <img src="./screenshots/2.jpg" width="24%"> <img src="./screenshots/3.jpg" width="24%"> <img src="./screenshots/4.jpg" width="24%"> 
 
 
 
