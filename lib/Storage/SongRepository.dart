@@ -1,16 +1,16 @@
-import 'package:music_player/Models/SongModel.dart';
+import 'package:music_player/Models/CachedSongs.dart';
 import 'package:music_player/Storage/DatabaseCreator.dart';
 
 class UsersRepository {
-  static Future<List<SongModel>> getAllSongs() async {
+  static Future<List<CachedSong>> getAllSongs() async {
     await DatabaseCreator().initDatabase();
 
     final sql = "SELECT * FROM '${DatabaseCreator.SongsTable}'";
     final data = await db.rawQuery(sql);
-    List<SongModel> songs = [];
+    List<CachedSong> songs = [];
 
     for (final node in data) {
-      final song = SongModel.fromJSON(node);
+      final song = CachedSong.fromJson(node);
       songs.add(song);
     }
     return songs;
@@ -29,7 +29,7 @@ class UsersRepository {
     }
   }*/
 
-  static Future<List<SongModel>> getSongsByArtist(int artistId) async {
+  static Future<List<CachedSong>> getSongsByArtist(int artistId) async {
     final sql =
         "SELECT * FROM ${DatabaseCreator.SongsTable} WHERE 'artistId' = ?";
 
@@ -37,16 +37,16 @@ class UsersRepository {
 
     final data = await db.rawQuery(sql, params);
 
-    List<SongModel> songs = [];
+    List<CachedSong> songs = [];
 
     for (final node in data) {
-      final song = SongModel.fromJSON(node);
+      final song = CachedSong.fromJson(node);
       songs.add(song);
     }
     return songs;
   }
 
-  static Future<void> addSong(SongModel song) async {
+  /*static Future<void> addSong(CachedSong song) async {
     await DatabaseCreator().initDatabase();
 
     final sql = '''INSERT INTO ${DatabaseCreator.SongsTable}
@@ -101,12 +101,13 @@ class UsersRepository {
     final result = await db.rawInsert(sql, params);
     print("user inserted");
   }
+*/
 
-  static Future<void> addSongs(List<SongModel> songs) async {
+  /*static Future<void> addSongs(List<CachedSong> songs) async {
     for (var i = 0; i < songs.length; i++) {
       await addSong(songs[i]);
     }
 
     print("added multiple");
-  }
+  }*/
 }

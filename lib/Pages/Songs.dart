@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/CustomWidgets/empty_screen.dart';
-import 'package:music_player/CustomWidgets/gradient_containers.dart';
 import 'package:music_player/Helpers/audio_query.dart';
 import 'package:music_player/MiniPlayer.dart';
 import 'package:music_player/MusicPlayer.dart';
@@ -23,10 +22,10 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    getCached();
+    loadSongs();
   }
 
-  Future<void> getCached() async {
+  Future<void> loadSongs() async {
     await Future.delayed(Duration(milliseconds: 500));
     await offlineAudioQuery.requestPermission();
     final List<SongModel> temp = await offlineAudioQuery.getSongs();
@@ -36,6 +35,8 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
     added = true;
     setState(() {});
     _cachedSongsMap = await offlineAudioQuery.getArtwork(_cachedSongs);
+    print("cached songs : $_cachedSongs");
+    print("cached Songs Map : $_cachedSongsMap");
   }
 
   @override
