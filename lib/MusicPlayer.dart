@@ -255,12 +255,8 @@ class _PlayScreenState extends State<PlayScreen> {
                     duration: const Duration(milliseconds: 600),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        begin: !useImageColor
-                            ? Alignment.topLeft
-                            : Alignment.topCenter,
-                        end: !useImageColor
-                            ? Alignment.bottomRight
-                            : Alignment.center,
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomRight,
                         colors: [
                           value ?? const Color(0xfff5f9ff),
                           Colors.black,
@@ -546,7 +542,6 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
                             ? audioHandler.pause()
                             : audioHandler.play();
                       },
-                      onDoubleTap: () => print("flip"),
                       onHorizontalDragEnd: (DragEndDetails details) {
                         if ((details.primaryVelocity ?? 0) > 100) {
                           if (queueState.hasPrevious) {
@@ -560,47 +555,39 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
                           }
                         }
                       },
-                      onLongPress: () {
-                        if (widget.offline) {
-                          print("add to playlist");
-                        }
-                      },
-                      onVerticalDragStart: (_) {
-                        dragging.value = true;
-                      },
-                      onVerticalDragEnd: (_) {
-                        dragging.value = false;
-                      },
-                      onVerticalDragUpdate: (DragUpdateDetails details) {
-                        if (details.delta.dy != 0.0) {
-                          double volume = audioHandler.volume.value;
-                          volume -= details.delta.dy / 150;
-                          if (volume < 0) {
-                            volume = 0;
-                          }
-                          if (volume > 1.0) {
-                            volume = 1.0;
-                          }
-                          audioHandler.setVolume(volume);
-                        }
-                      },
                       child: Stack(
                         children: [
                           Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.grey.shade300,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 3.0,
+                                  offset: Offset(1, 1),
+                                  // shadow direction: bottom right
+                                )
+                              ],
+                            ),
                             //elevation: 10.0,
                             /*shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),*/
-                            //clipBehavior: Clip.hardEdge,
+                                borderRadius: BorderRadius.circular(10.0)),
+                            clipBehavior: Clip.hardEdge,*/
                             child: widget.mediaItem.artUri
                                     .toString()
                                     .startsWith('file')
-                                ? Image(
-                                    fit: BoxFit.cover,
-                                    height: widget.width * 0.85,
-                                    width: widget.width * 0.85,
-                                    gaplessPlayback: true,
-                                    image: FileImage(File(
-                                        widget.mediaItem.artUri.toFilePath())))
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image(
+                                        fit: BoxFit.cover,
+                                        height: widget.width * 0.85,
+                                        width: widget.width * 0.85,
+                                        gaplessPlayback: true,
+                                        image: FileImage(File(widget
+                                            .mediaItem.artUri
+                                            .toFilePath()))),
+                                  )
                                 : CachedNetworkImage(
                                     fit: BoxFit.cover,
                                     errorWidget:

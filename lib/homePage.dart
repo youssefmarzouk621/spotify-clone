@@ -4,6 +4,7 @@ import 'package:music_player/Pages/Artist.dart';
 import 'package:music_player/Pages/PlaylistScreen.dart';
 import 'package:music_player/Pages/Songs.dart';
 import 'package:music_player/MiniPlayer.dart';
+import 'package:music_player/main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           color: Theme.of(context).textSelectionColor,
                           fontSize: 27,
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.w400)),
                   titlePadding: EdgeInsets.only(left: 15, bottom: 10),
                 ),
                 brightness: Brightness.dark,
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
                 fontSize: 25,
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.w400)),
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -230,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           color: Theme.of(context).textSelectionColor,
                           fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.w300),
                     ),
                   ],
                 ),

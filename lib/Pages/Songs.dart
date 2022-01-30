@@ -35,8 +35,8 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
     added = true;
     setState(() {});
     _cachedSongsMap = await offlineAudioQuery.getArtwork(_cachedSongs);
-    print("cached songs : $_cachedSongs");
-    print("cached Songs Map : $_cachedSongsMap");
+    /*print("cached songs : $_cachedSongs");
+    print("cached Songs Map : $_cachedSongsMap");*/
   }
 
   @override
@@ -251,6 +251,34 @@ class SongsTab extends StatelessWidget {
   final List<SongModel> cachedSongs;
   final List cachedSongsMap;
   const SongsTab({@required this.cachedSongs, @required this.cachedSongsMap});
+  Route playScreenRoute(
+      {Map<dynamic, dynamic> data,
+      bool fromMiniplayer,
+      bool displayNowPlaying}) {
+    return PageRouteBuilder(
+      //barrierDismissible: true,
+      //barrierColor: Colors.transparent,
+      opaque: false,
+      pageBuilder: (context, animation, secondaryAnimation) => PlayScreen(
+        data: data,
+        fromMiniplayer: fromMiniplayer,
+        displayNowPlaying: displayNowPlaying,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +328,12 @@ class SongsTab extends StatelessWidget {
                   if (playIndex == -1) {
                     final singleSongMap = await OfflineAudioQuery()
                         .getArtwork([cachedSongs[index]]);
-                    Navigator.of(context).push(
+                    Navigator.of(context).push(playScreenRoute(data: {
+                      'response': singleSongMap,
+                      'index': 0,
+                      'offline': true
+                    }, fromMiniplayer: false, displayNowPlaying: false));
+                    /*Navigator.of(context).push(
                       PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (_, __, ___) => PlayScreen(
@@ -313,9 +346,18 @@ class SongsTab extends StatelessWidget {
                           displayNowPlaying: false,
                         ),
                       ),
-                    );
+                    );*/
                   } else {
-                    Navigator.of(context).push(
+                    Navigator.of(context).push(playScreenRoute(
+                      data: {
+                        'response': cachedSongsMap,
+                        'index': playIndex,
+                        'offline': true
+                      },
+                      fromMiniplayer: false,
+                      displayNowPlaying: false,
+                    ));
+                    /*Navigator.of(context).push(
                       PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (_, __, ___) => PlayScreen(
@@ -328,7 +370,7 @@ class SongsTab extends StatelessWidget {
                           displayNowPlaying: false,
                         ),
                       ),
-                    );
+                    );*/
                   }
                 },
               );

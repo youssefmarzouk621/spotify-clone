@@ -40,9 +40,6 @@ class LoadingAnimation extends StatelessWidget {
 //Original Theme
 ThemeData themeLightData(BuildContext context) {
   return ThemeData(
-    textTheme: GoogleFonts.nunitoSansTextTheme(
-      Theme.of(context).textTheme,
-    ),
     backgroundColor: Colors.white,
     textSelectionColor: Colors.black,
     textSelectionHandleColor: Colors.grey,
@@ -56,9 +53,6 @@ ThemeData themeLightData(BuildContext context) {
 
 ThemeData themeDarkData(BuildContext context) {
   return ThemeData(
-    textTheme: GoogleFonts.nunitoSansTextTheme(
-      Theme.of(context).textTheme,
-    ),
     backgroundColor: Colors.black,
     textSelectionColor: Colors.white,
     textSelectionHandleColor: Colors.grey,

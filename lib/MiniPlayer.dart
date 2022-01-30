@@ -17,12 +17,45 @@ class MiniPlayer extends StatefulWidget {
 }
 
 class _MiniPlayerState extends State<MiniPlayer> {
+  Route playScreenRoute(
+      {Map<dynamic, dynamic> data,
+      bool fromMiniplayer,
+      bool displayNowPlaying}) {
+    return PageRouteBuilder(
+      //barrierDismissible: true,
+      //barrierColor: Colors.transparent,
+      opaque: false,
+      pageBuilder: (context, animation, secondaryAnimation) => PlayScreen(
+        data: data,
+        fromMiniplayer: fromMiniplayer,
+        displayNowPlaying: displayNowPlaying,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<PlaybackState>(
         stream: audioHandler.playbackState,
         builder: (context, snapshot) {
           final playbackState = snapshot.data;
+          if (snapshot.data == null) {
+            print("snapshot null");
+            return SizedBox();
+          }
           final processingState = playbackState.processingState;
           if (processingState == AudioProcessingState.idle) {
             return const SizedBox();
@@ -54,7 +87,15 @@ class _MiniPlayerState extends State<MiniPlayer> {
                           children: [
                             ListTile(
                               onTap: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).push(playScreenRoute(
+                                    data: {
+                                      'response': [],
+                                      'index': 1,
+                                      'offline': null,
+                                    },
+                                    fromMiniplayer: true,
+                                    displayNowPlaying: false));
+                                /*Navigator.of(context).push(
                                   PageRouteBuilder(
                                     opaque: false,
                                     pageBuilder: (_, __, ___) =>
@@ -68,7 +109,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                                       displayNowPlaying: false,
                                     ),
                                   ),
-                                );
+                                );*/
                               },
                               title: Text(
                                 mediaItem.title,
