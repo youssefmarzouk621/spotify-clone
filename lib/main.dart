@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/Services/audio_service.dart';
@@ -5,6 +7,9 @@ import 'package:music_player/Statics/Statics.dart';
 import 'package:music_player/homePage.dart';
 import 'package:music_player/MusicPlayer.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 AudioPlayerHandler audioHandler;
 Future<void> main() async {
@@ -12,7 +17,42 @@ Future<void> main() async {
   Paint.enableDithering = true;
   setOptimalDisplayMode();
   await startService();
+  await Hive.initFlutter();
+  //Hive.registerAdapter(adapter)
+  await openHiveBox('playlists');
+
   runApp(MyApp());
+}
+
+Future<void> openHiveBox(String boxName, {bool limit = false}) async {
+  if (limit) {
+    final box = await Hive.openBox(boxName).onError((error, stackTrace) async {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      final String dirPath = dir.path;
+      final File dbFile = File('$dirPath/$boxName.hive');
+      final File lockFile = File('$dirPath/$boxName.lock');
+      await dbFile.delete();
+      await lockFile.delete();
+      await Hive.openBox(boxName);
+      throw 'Failed to open $boxName Box\nError: $error';
+    });
+    // clear box if it grows large
+    if (box.length > 500) {
+      box.clear();
+    }
+    await Hive.openBox(boxName);
+  } else {
+    await Hive.openBox(boxName).onError((error, stackTrace) async {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      final String dirPath = dir.path;
+      final File dbFile = File('$dirPath/$boxName.hive');
+      final File lockFile = File('$dirPath/$boxName.lock');
+      await dbFile.delete();
+      await lockFile.delete();
+      await Hive.openBox(boxName);
+      throw 'Failed to open $boxName Box\nError: $error';
+    });
+  }
 }
 
 Future<void> setOptimalDisplayMode() async {

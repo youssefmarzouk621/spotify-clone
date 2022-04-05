@@ -57,12 +57,11 @@ class _BottomGradientContainerState extends State<BottomGradientContainer> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: Theme.of(context).brightness == Brightness.dark
-              ? currentTheme.getBottomGradient()
-              : [
-                  Colors.white,
-                  Theme.of(context).canvasColor,
-                ],
+          colors: [
+            Colors.grey[900],
+            Colors.black,
+            Colors.black,
+          ],
         ),
       ),
       child: widget.child,
@@ -84,16 +83,18 @@ class GradientCard extends StatefulWidget {
 class _GradientCardState extends State<GradientCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      shadowColor: Palette.primaryColor,
-      shape: RoundedRectangleBorder(
+    return Container(
+      //elevation: 10,
+      //shadowColor: Palette.primaryColor,
+      /*shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(widget.radius ?? 10.0),
       ),
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,*/
+
+      //margin: EdgeInsets.zero,
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

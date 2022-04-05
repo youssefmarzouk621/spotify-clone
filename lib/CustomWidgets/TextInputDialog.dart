@@ -11,7 +11,9 @@ class TextInputDialog {
     await showDialog(
       context: context,
       builder: (BuildContext ctxt) {
-        final _controller = TextEditingController(text: initialText);
+        final _controller = TextEditingController(
+          text: initialText,
+        );
         return AlertDialog(
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -20,13 +22,13 @@ class TextInputDialog {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                    style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ],
               ),
               TextField(
                 autofocus: true,
+                cursorColor: Theme.of(context).primaryColor,
                 controller: _controller,
                 keyboardType: keyboardType,
                 textAlignVertical: TextAlignVertical.bottom,
@@ -51,7 +53,7 @@ class TextInputDialog {
             TextButton(
               style: TextButton.styleFrom(
                 primary: Colors.white,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor: Theme.of(context).primaryColor,
               ),
               onPressed: () {
                 onSubmitted(_controller.text.trim());

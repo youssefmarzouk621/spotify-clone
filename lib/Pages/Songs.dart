@@ -26,7 +26,7 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> loadSongs() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 300));
     await offlineAudioQuery.requestPermission();
     final List<SongModel> temp = await offlineAudioQuery.getSongs();
 
@@ -35,96 +35,49 @@ class _SongsState extends State<Songs> with AutomaticKeepAliveClientMixin {
     added = true;
     setState(() {});
     _cachedSongsMap = await offlineAudioQuery.getArtwork(_cachedSongs);
-    /*print("cached songs : $_cachedSongs");
-    print("cached Songs Map : $_cachedSongsMap");*/
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(
-      children: [
-        Expanded(
-          // child: DefaultTabController(
-          // length: 4,
-          child: Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            appBar: AppBar(
-              title: const Text('Songs'),
-              // bottom: TabBar(
-              // controller: _tcontroller,
-              // tabs:
-              // widget.type == 'all'
-              // ?
-              //  [
-              //     const Tab(
-              //       text: 'Songs',
-              //     ),
-              //     const Tab(
-              //       text: 'Albums',
-              //     ),
-              //     const Tab(
-              //       text: 'Artists',
-              //     ),
-              //     const Tab(
-              //       text: 'Genres',
-              //     ),
-              //     const Tab(
-              //       text: 'Videos',
-              //     )
-              //   ]
-              // :
-              // const [
-              // Tab(
-              //   text: 'Songs',
-              // ),
-              // Tab(
-              //   text: 'Albums',
-              // ),
-              // Tab(
-              //   text: 'Artists',
-              // ),
-              // Tab(
-              //   text: 'Genres',
-              // ),
-              // ],
-              // ),
-              actions: [
-                IconButton(
-                  icon: const Icon(CupertinoIcons.search),
-                  tooltip: 'Search',
-                  onPressed: () {},
-                ),
-              ],
-              centerTitle: false,
-              backgroundColor: Theme.of(context).backgroundColor,
-              elevation: 0,
-            ),
-            body: !added
-                ? SizedBox(
-                    child: Center(
-                      child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 7,
-                          width: MediaQuery.of(context).size.width / 7,
-                          child: LoadingAnimation()),
-                    ),
-                  )
-                :
-                // TabBarView(
-                //     physics: const CustomPhysics(),
-                //     controller: _tcontroller,
-                //     children:
-                //         //  widget.type == 'all'
-                //         //     ?
-                //         [
-                SongsTab(
-                    cachedSongs: _cachedSongs,
-                    cachedSongsMap: _cachedSongsMap,
-                  ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        title: const Text('Songs'),
+        actions: [
+          IconButton(
+            icon: const Icon(CupertinoIcons.search),
+            tooltip: 'Search',
+            onPressed: () {},
           ),
-        ),
-        MiniPlayer(),
-      ],
+        ],
+        centerTitle: false,
+        backgroundColor: Theme.of(context).backgroundColor,
+        elevation: 0,
+      ),
+      body: Stack(
+        children: [
+          !added
+              ? Container(
+                  child: Center(
+                    child: Container(
+                        height: MediaQuery.of(context).size.width / 7,
+                        width: MediaQuery.of(context).size.width / 7,
+                        child: LoadingAnimation()),
+                  ),
+                )
+              : SongsTab(
+                  cachedSongs: _cachedSongs,
+                  cachedSongsMap: _cachedSongsMap,
+                ),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                  color: Colors.transparent,
+                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: MiniPlayer())),
+        ],
+      ),
     );
   }
 
@@ -256,8 +209,6 @@ class SongsTab extends StatelessWidget {
       bool fromMiniplayer,
       bool displayNowPlaying}) {
     return PageRouteBuilder(
-      //barrierDismissible: true,
-      //barrierColor: Colors.transparent,
       opaque: false,
       pageBuilder: (context, animation, secondaryAnimation) => PlayScreen(
         data: data,
@@ -322,9 +273,54 @@ class SongsTab extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Theme.of(context).textSelectionColor),
                 ),
+                trailing: PopupMenuButton(
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Colors.white,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    ),
+                    onSelected: (int value) async {
+                      if (value == 0) {
+                        /*AddToOffPlaylist().addToOffPlaylist(
+                              context,
+                              widget.songs[index].id,
+                            );*/
+                      }
+                      if (value == 1) {
+                        /*await OfflineAudioQuery().removeFromPlaylist(
+                              playlistId: widget.playlistId!,
+                              audioId: widget.songs[index].id,
+                            );
+                            ShowSnackBar().showSnackBar(
+                              context,
+                              '${AppLocalizations.of(context)!.removedFrom} ${widget.playlistName}',
+                            );*/
+                      }
+                    },
+                    //color: Colors.green,
+                    color: Colors.grey[900],
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 0,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.playlist_add_rounded,
+                                    color: Colors.white),
+                                const SizedBox(width: 10.0),
+                                Text(
+                                  "add to playlist",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                 onTap: () async {
                   final int playIndex = cachedSongsMap.indexWhere(
                       (element) => element['_id'] == cachedSongs[index].id);
+
                   if (playIndex == -1) {
                     final singleSongMap = await OfflineAudioQuery()
                         .getArtwork([cachedSongs[index]]);
@@ -333,20 +329,6 @@ class SongsTab extends StatelessWidget {
                       'index': 0,
                       'offline': true
                     }, fromMiniplayer: false, displayNowPlaying: false));
-                    /*Navigator.of(context).push(
-                      PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder: (_, __, ___) => PlayScreen(
-                          data: {
-                            'response': singleSongMap,
-                            'index': 0,
-                            'offline': true
-                          },
-                          fromMiniplayer: false,
-                          displayNowPlaying: false,
-                        ),
-                      ),
-                    );*/
                   } else {
                     Navigator.of(context).push(playScreenRoute(
                       data: {
@@ -357,20 +339,6 @@ class SongsTab extends StatelessWidget {
                       fromMiniplayer: false,
                       displayNowPlaying: false,
                     ));
-                    /*Navigator.of(context).push(
-                      PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder: (_, __, ___) => PlayScreen(
-                          data: {
-                            'response': cachedSongsMap,
-                            'index': playIndex,
-                            'offline': true
-                          },
-                          fromMiniplayer: false,
-                          displayNowPlaying: false,
-                        ),
-                      ),
-                    );*/
                   }
                 },
               );

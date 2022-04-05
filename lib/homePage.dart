@@ -4,7 +4,6 @@ import 'package:music_player/Pages/Artist.dart';
 import 'package:music_player/Pages/PlaylistScreen.dart';
 import 'package:music_player/Pages/Songs.dart';
 import 'package:music_player/MiniPlayer.dart';
-import 'package:music_player/main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,63 +20,104 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Expanded(
-          // child: DefaultTabController(
-          // length: 4,
-          child: Scaffold(
+    return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        body: SafeArea(
-          minimum: EdgeInsets.only(left: 10),
-          child: CustomScrollView(
-            scrollDirection: Axis.vertical,
-            slivers: [
-              SliverAppBar(
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Library",
-                      style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                          fontSize: 27,
-                          fontWeight: FontWeight.w400)),
-                  titlePadding: EdgeInsets.only(left: 15, bottom: 10),
-                ),
-                brightness: Brightness.dark,
-                backgroundColor: Theme.of(context).backgroundColor,
-                toolbarHeight: 60,
-                pinned: true,
+        body: Stack(
+          children: [
+            SafeArea(
+              minimum: EdgeInsets.only(left: 10, right: 10),
+              child: CustomScrollView(
+                scrollDirection: Axis.vertical,
+                slivers: [
+                  SliverAppBar(
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text("Library",
+                          style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                              fontSize: 27,
+                              fontWeight: FontWeight.w400)),
+                      titlePadding: EdgeInsets.only(left: 15, bottom: 10),
+                    ),
+                    brightness: Brightness.dark,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    toolbarHeight: 60,
+                    pinned: true,
+                  ),
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                    _buildPages(),
+                    Container(
+                        padding: EdgeInsets.only(top: 15),
+                        child: _buildRecentlyPlayed()),
+                    Container(
+                        padding: EdgeInsets.only(top: 15),
+                        child: _buildFavotitesArtists()),
+                  ]))
+                ],
               ),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                _buildPages(),
-                Container(
-                    padding: EdgeInsets.only(top: 15),
-                    child: _buildFavotitesArtists()),
-
-                //_buildRecentlyAdded(),
-              ]))
-            ],
-          ),
-        ),
-      )),
-      MiniPlayer()
-    ]);
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                    color: Colors.transparent,
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: MiniPlayer()))
+          ],
+        ));
   }
 
-  Widget _buildRecentlyAdded() {
+  Column _buildRecentlyPlayed() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text("Recently Added",
+        Text("Recently Played",
             style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
                 fontSize: 25,
-                fontWeight: FontWeight.bold))
+                fontWeight: FontWeight.w400)),
+        SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 15, bottom: 15, right: 15),
+                  child: _buildArtistCard(
+                      artistName: "Kid Cudi", imagePath: "assets/kidcudi.jpeg"),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 15, bottom: 15, right: 15),
+                  child: _buildArtistCard(
+                      artistName: "Dua Lipa", imagePath: "assets/dualipa.jpeg"),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 15, bottom: 15, right: 15),
+                  child: _buildArtistCard(
+                      artistName: "Rihanna", imagePath: "assets/rihanna.jpg"),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 15, bottom: 15, right: 15),
+                  child: _buildArtistCard(
+                      artistName: "ElGrandeToto",
+                      imagePath: "assets/grandetoto.jpeg"),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 15, bottom: 15, right: 15),
+                  child: _buildArtistCard(
+                      artistName: "Drake", imagePath: "assets/drake.png"),
+                ),
+              ],
+            ))
       ],
     );
   }
 
-  Widget _buildFavotitesArtists() {
+  Column _buildFavotitesArtists() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -152,7 +192,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPages() {
+  Container _buildPages() {
     return Container(
       padding: EdgeInsets.only(top: 15),
       child: Column(

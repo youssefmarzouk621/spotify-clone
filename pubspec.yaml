@@ -43,7 +43,13 @@ dependencies:
   # UI related
   cupertino_icons: ^1.0.2
   palette_generator: ^0.3.1
+  checkbox_formfield: ^0.2.0
 
+  # Database related
+  hive: 
+  hive_flutter:   
+  # Storage related
+  path_provider: 
 
 dev_dependencies:
   flutter_test:
